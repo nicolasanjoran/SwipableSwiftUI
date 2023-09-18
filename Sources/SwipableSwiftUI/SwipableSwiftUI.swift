@@ -17,7 +17,7 @@ fileprivate struct SwipableContentSizeCalculator: ViewModifier {
 }
 
 fileprivate extension View {
-    func saveSize(in size: Binding<CGSize>) -> some View {
+    func saveSwipableSize(in size: Binding<CGSize>) -> some View {
         modifier(SwipableContentSizeCalculator(size: size))
     }
 }
@@ -61,7 +61,7 @@ struct Swipable<Content: View> : View {
         VStack {
             content
                 .background(Color.black.opacity(0.00000001))
-                .saveSize(in: $contentSize)
+                .saveSwipableSize(in: $contentSize)
                 .overlay(
                     ZStack {
                         HStack {
