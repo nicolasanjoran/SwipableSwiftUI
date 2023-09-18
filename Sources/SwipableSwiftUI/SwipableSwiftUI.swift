@@ -92,8 +92,9 @@ public struct Swipable<Content: View> : View {
                 .offset(CGSize(width: offset, height: 0))
                 .highPriorityGesture(
                     DragGesture(minimumDistance: 20, coordinateSpace: .local)
-                        .onChanged { v in
-                            var dragOffset = v.translation.width
+                        .updating($dragOffset) { value, state, transaction in
+                            state = value.translation
+                            var dragOffset = value.translation.width
                             
                             if leadingAction == nil {
                                 dragOffset = max(0, dragOffset)
@@ -117,9 +118,6 @@ public struct Swipable<Content: View> : View {
                                     impactFeedbackGenerator.impactOccurred()
                                 }
                             }
-                        }
-                        .updating($dragOffset) { value, state, transaction in
-                            state = value.translation
                         }
                         .onEnded { _ in
                             withAnimation {
