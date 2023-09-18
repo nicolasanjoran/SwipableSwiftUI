@@ -69,7 +69,7 @@ public struct Swipable<Content: View> : View {
                             Spacer()
                             leadingIcon
                                 .font(.title3)
-                                .fontWeight(selection == .leading ? Font.Weight.bold : Font.Weight.regular)
+//                                .fontWeight(selection == .leading ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset > 0 ? 1 : 0)
@@ -80,7 +80,7 @@ public struct Swipable<Content: View> : View {
                         HStack {
                             trailingIcon
                                 .font(.title3)
-                                .fontWeight(selection == .trailing ? Font.Weight.bold : Font.Weight.regular)
+//                                .fontWeight(selection == .trailing ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset < 0 ? 1 : 0)
