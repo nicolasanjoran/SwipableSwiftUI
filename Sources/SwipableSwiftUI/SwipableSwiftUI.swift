@@ -22,7 +22,7 @@ fileprivate extension View {
     }
 }
 
-struct Swipable<Content: View> : View {
+public struct Swipable<Content: View> : View {
     private let content: Content
     @State private var contentSize = CGSize()
     
@@ -37,11 +37,11 @@ struct Swipable<Content: View> : View {
     private var leadingAction : (() -> Void)?
     private var trailingAction : (() -> Void)?
     
-    init(@ViewBuilder content: () -> Content) {
+    public init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
     
-    func swipeLeading(icon: Image, color: Color, action: @escaping ()->Void) -> Swipable {
+    public func swipeLeading(icon: Image, color: Color, action: @escaping ()->Void) -> Swipable {
         var newView = self
         newView.leadingIcon = icon
         newView.leadingColor = color
@@ -49,7 +49,7 @@ struct Swipable<Content: View> : View {
         return newView
     }
     
-    func swipeTrailing(icon: Image, color: Color, action: @escaping ()->Void) -> Swipable {
+    public func swipeTrailing(icon: Image, color: Color, action: @escaping ()->Void) -> Swipable {
         var newView = self
         newView.trailingIcon = icon
         newView.trailingColor = color
@@ -57,7 +57,7 @@ struct Swipable<Content: View> : View {
         return newView
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             content
                 .background(Color.black.opacity(0.00000001))
