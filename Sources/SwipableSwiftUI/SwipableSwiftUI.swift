@@ -69,6 +69,7 @@ public struct Swipable<Content: View> : View {
                             Spacer()
                             leadingIcon
                                 .font(.title3)
+                                .fontWeight(selection == .leading ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset > 0 ? 1 : 0)
@@ -79,6 +80,7 @@ public struct Swipable<Content: View> : View {
                         HStack {
                             trailingIcon
                                 .font(.title3)
+                                .fontWeight(selection == .trailing ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset < 0 ? 1 : 0)
@@ -94,30 +96,6 @@ public struct Swipable<Content: View> : View {
                     DragGesture(minimumDistance: 20, coordinateSpace: .local)
                         .updating($dragOffset) { value, state, transaction in
                             state = value.translation
-                            var dragOffset = value.translation.width
-                            
-                            if leadingAction == nil {
-                                dragOffset = max(0, dragOffset)
-                            }
-                            if trailingAction == nil {
-                                dragOffset = min(0, dragOffset)
-                            }
-                            
-                            offset = dragOffset
-                            if selection == nil {
-                                if offset > contentSize.width / 2  {
-                                    selection = .leading
-                                    impactFeedbackGenerator.impactOccurred()
-                                } else if offset < -contentSize.width / 2  {
-                                    selection = .trailing
-                                    impactFeedbackGenerator.impactOccurred()
-                                }
-                            } else {
-                                if abs(offset) < (contentSize.width / 2 - 20) {
-                                    selection = nil
-                                    impactFeedbackGenerator.impactOccurred()
-                                }
-                            }
                         }
                         .onEnded { _ in
                             withAnimation {
@@ -131,6 +109,31 @@ public struct Swipable<Content: View> : View {
                             }
                         }
                 )
+                .onChange(of: dragOffset) { newValue in
+                    var dragOffset = newValue.width
+                    if leadingAction == nil {
+                        dragOffset = max(0, dragOffset)
+                    }
+                    if trailingAction == nil {
+                        dragOffset = min(0, dragOffset)
+                    }
+                    
+                    offset = dragOffset
+                    if selection == nil {
+                        if offset > contentSize.width / 2  {
+                            selection = .leading
+                            impactFeedbackGenerator.impactOccurred()
+                        } else if offset < -contentSize.width / 2  {
+                            selection = .trailing
+                            impactFeedbackGenerator.impactOccurred()
+                        }
+                    } else {
+                        if abs(offset) < (contentSize.width / 2 - 20) {
+                            selection = nil
+                            impactFeedbackGenerator.impactOccurred()
+                        }
+                    }
+                }
         }.frame(maxWidth: .infinity)
             .clipped()
     }
