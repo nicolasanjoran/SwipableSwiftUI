@@ -27,6 +27,7 @@ public struct Swipable<Content: View> : View {
     @State private var contentSize = CGSize()
     
     @State private var offset: CGFloat = 0
+    @GestureState private var dragOffset: CGSize = .zero
     private let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
     @State private var selection : HorizontalAlignment?
     
@@ -116,6 +117,9 @@ public struct Swipable<Content: View> : View {
                                     impactFeedbackGenerator.impactOccurred()
                                 }
                             }
+                        }
+                        .updating($dragOffset) { value, state, transaction in
+                            state = value.translation
                         }
                         .onEnded { _ in
                             withAnimation {
