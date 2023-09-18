@@ -65,26 +65,41 @@ public struct Swipable<Content: View> : View {
                 .saveSwipableSize(in: $contentSize)
                 .overlay(
                     ZStack {
-                        HStack {
-                            Spacer()
+                        HStack() {
+                            let spacerToLeft = offset < 20 || selection == .leading
+                            if spacerToLeft {
+                                Spacer()
+                            } else {
+                                Color.clear.frame(width: contentSize.width - offset, height: 0)
+                            }
                             leadingIcon
                                 .font(.title3)
 //                                .fontWeight(selection == .leading ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset > 0 ? 1 : 0)
+                            if !spacerToLeft {
+                                Spacer()
+                            }
                         }
-                        .frame(maxHeight: .infinity)
                         .background(leadingColor)
                         .offset(CGSize(width: -(contentSize.width), height: 0))
                         HStack {
+                            let spacerToRight = offset > -20 || selection == .trailing
+                            if !spacerToRight {
+                                Spacer()
+                            }
                             trailingIcon
                                 .font(.title3)
 //                                .fontWeight(selection == .trailing ? Font.Weight.bold : Font.Weight.regular)
                                 .padding()
                                 .foregroundColor(.white)
                                 .opacity(offset < 0 ? 1 : 0)
-                            Spacer()
+                            if spacerToRight {
+                                Spacer()
+                            } else {
+                                Color.clear.frame(width: contentSize.width + offset, height: 0)
+                            }
                         }
                         .frame(maxHeight: .infinity)
                         .background(trailingColor)
@@ -121,15 +136,22 @@ public struct Swipable<Content: View> : View {
                     offset = dragOffset
                     if selection == nil {
                         if offset > contentSize.width / 2  {
-                            selection = .leading
+                            withAnimation(Animation.easeInOut(duration: 0.1)) {
+                                selection = .leading
+                            }
+                            
                             impactFeedbackGenerator.impactOccurred()
                         } else if offset < -contentSize.width / 2  {
-                            selection = .trailing
+                            withAnimation(Animation.easeInOut(duration: 0.1)) {
+                                selection = .trailing
+                            }
                             impactFeedbackGenerator.impactOccurred()
                         }
                     } else {
                         if abs(offset) < (contentSize.width / 2 - 20) {
-                            selection = nil
+                            withAnimation(Animation.easeInOut(duration: 0.1)) {
+                                selection = nil
+                            }
                             impactFeedbackGenerator.impactOccurred()
                         }
                     }
